@@ -16,6 +16,7 @@ st1 = [];
 l = 3;
 
 nameMovieAll = input("Введите название фильма:");
+nameMovieAll = nameMovieAll.replace(' ','+');
 s_url_en = "https://www.imdb.com/find?ref_nv_sr_fn&q="+nameMovieAll+"&s=all";
 s_url_rus = "https://www.imdb.com/find?ref_=nv_sr_fn&q="+nameMovieAll+"&s=all";
 
