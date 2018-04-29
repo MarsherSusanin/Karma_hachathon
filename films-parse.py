@@ -155,9 +155,12 @@ if l < 250:
     s1 = 'release dates" >';
     s2 = '\n';
     ps1 = data.find(s1,1,len(data))+len(s1);
-    ps2 = data.find(s2,ps1,len(data));
-    stMovieResult.append(data[ps1:ps2]);
-    data = data[ps2:len(data)];
+    if ps1 >= len(s1):
+        ps2 = data.find(s2,ps1,len(data));
+        stMovieResult.append(data[ps1:ps2]);
+        data = data[ps2:len(data)];
+    else:
+        stMovieResult.append('');
     
     # Ссылка на постер
     s0 = '<div class="poster">';
@@ -252,6 +255,7 @@ if l < 250:
     stMovieResult.append(s[0:len(s)]);
     
     # Вывод на экран
+    print('');
     for i in range(len(stMovieResult)):
         if stMovieResult[i] != '':
             s1 = stMovieResultDesc[i];
