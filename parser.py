@@ -1,13 +1,18 @@
-import bs4, requests, re
+from bs4 import BeautifulSoup
+import requests, re, urllib.parse, urllib.request
 
-site=requests.get("https://www.google.com/search?q=фильмы&stick=H4sIAAAAAAAAAONgfcSYxi3w8sc9YanYSWtOXmMM5-L0Tc1NSi0q9k8T8uLics7PyUlNLsnMzxPS4RKVEtRPhgvop2Xm5BZrMEgJc2EKS_FZ8VxsubDjwu6LPRf2XOzmAQBhpmC-awAAAA&npsic=0&sa=X&ved=0ahUKEwizv_Wg5tzaAhUhG5oKHSCXAioQ1i8IIjAK")
+def get_html(url):
+    response=urllib.request.urlopen(url)
+    return response.read()
 
-#html_result=bs4.BeautifulSoup(site.text,'html.parser')
+def parse (html):
+    soup = BeautifulSoup(html)
+    tittle=soup.find('p', class_="Title")
+    print (tittle.prettify())
 
-pattern= re.search(r'[aria-label=]["^"]',site)
 
-#tittle=html_result.select('aria-label=')
+def main ():
+    parse(get_html('https://www.filmpro.ru/materials/selections/63250'))
 
-#NameMovie = tittle[0].getText()
-
-print(pattern)
+if __name__=='__main__':
+    main()
