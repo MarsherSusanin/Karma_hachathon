@@ -9,6 +9,8 @@ import requests
 #import urllib.parse
 import time
 import re
+import os
+import subprocess
 from urllib.parse   import quote
 
 def is_rus(text):
@@ -54,12 +56,32 @@ for i in range(1,len(st0),2):
 l = int(len(st0)/2);
 print ("Количество фильмов: "+str(l));
 
-
+st01 = [];
+for i in range(1,len(st0)-1,2):
+    data = st0[i];
+    s1 = '" >';
+    ps1 = data.find(s1,0,len(data))+len(s1);
+    data1 = data[ps1:len(data)];
+    data1 = data1.replace('</a>','');
+    data1 = data1.replace('</td>','');
+    data1 = data1.replace('<br>','');
+    ps1 = data1.find('<small',0,len(data1));
+    if ps1 >= 0:
+        data1 = data1[0:ps1];
+    st01.append(data1);
+    
+'''
 for i in range(1,len(st0)-1,2):
     print (st0[i]);
+'''
+print('');
+for i in range(0,len(st01),1):
+    print (str(i+1)+'. =   '+st01[i]);
+'''
 for i in range(l):
     print (st1[i]);
-
+'''    
+print('');
 nMovie = input("Введите номер фильма:");
 urlMovie = st1[int(nMovie)-1];
 response = urllib.request.urlopen(urlMovie);
@@ -115,11 +137,36 @@ s1 = 'itemprop="duration" datetime="PT';
 s2 = 'M">';
 ps1 = data.find(s1,1,len(data))+len(s1);
 ps2 = data.find(s2,ps1,len(data));
-stMovieResult.append(data[ps1:ps2]+' мин');
-data = data[ps2:len(data)];
+if ps1 >= len(s1):
+    stMovieResult.append(data[ps1:ps2]+' мин');
+    data = data[ps2:len(data)];
+else:
+    stMovieResult.append('');
 
 # Считываем жанры
 stGenre = [];
+s1 = 'genre">';
+s2 = 'class="ghost">';
+ps1 = data.find(s1,1,len(data))-10;
+ps2 = data.find(s2,1,len(data));
+k = ps2;
+if ps1 >= len(s1):
+    data1 = data[ps1:ps2];
+    s1 = 'genre">';
+    s2 = '</span>';
+    ps1 = data1.find(s1,1,len(data1))+len(s1);
+    while ps1 >= len(s1):
+        ps2 = data1.find(s2,ps1,len(data1));
+        stGenre.append(data1[ps1:ps2]);
+        data1 = data1[ps2:len(data1)];
+        ps1 = data1.find(s1,1,len(data1))+len(s1);
+    s = ', '.join(stGenre);
+    data = data[k:len(data)];
+else:
+    s = '';
+
+stMovieResult.append(s[0:len(s)]);
+'''stGenre = [];
 s1 = 'genre">';
 s2 = '</span>';
 ps1 = data.find(s1,1,len(data))+len(s1);
@@ -131,6 +178,7 @@ while ps1 >= len(s1):
 
 s = ', '.join(stGenre);
 stMovieResult.append(s[2:len(s)]);
+'''
 
 # Дата выхода фильма на экраны
 s1 = 'release dates" >';
@@ -149,13 +197,18 @@ ps1 = data.find(s1,ps1,len(data))+len(s1);
 ps2 = data.find(s2,ps1,len(data));
 stMovieResult.append(data[ps1:ps2]);
 data = data[ps2:len(data)];
+
 # Описание фильма
 s1 = 'itemprop="description">\n                    ';
 s2 = '\n';#\n\n            </div>';
 ps1 = data.find(s1,1,len(data))+len(s1);
-ps2 = data.find(s2,ps1,len(data));
-stMovieResult.append(data[ps1:ps2]);
-data = data[ps2:len(data)];
+if ps1 >= len(s1):
+    ps2 = data.find(s2,ps1,len(data));
+    stMovieResult.append(data[ps1:ps2]);
+    data = data[ps2:len(data)];
+else:
+    stMovieResult.append('');
+    
 # Режиссер
 s1 = '<span itemprop="creator"';
 ps1 = data.find(s1,1,len(data))+len(s1);
@@ -177,7 +230,7 @@ else:
         stMovieResult.append(data[ps1:ps2]);
         data = data[ps2:len(data)];
     else:
-        stMovieResult.append(data[ps1:ps2]);
+        stMovieResult.append('');#data[ps1:ps2]);
 
 # Сценаристы
 s1 = '<span itemprop="writers"';
@@ -203,9 +256,7 @@ else:
 
 stMovieResult.append(s[0:len(s)]);
 
-#print (data);
 # Актеры
-
 s1 = '<span itemprop="actors"';
 s2 = 'class="ghost">';
 ps1 = data.find(s1,1,len(data));
@@ -235,10 +286,12 @@ for i in range(len(stMovieResult)):
     if stMovieResult[i] != '':
         s1 = stMovieResultDesc[i];
         s2 = stMovieResult[i];
-        s1 = s1.encode('utf8');
-        s2 = s2.encode('utf8');
-        #s1 = u'%s' % u''.join(s1);
-        #s2 = u'%s' % u''.join(s2);
+        #s1 = s1.encode('koi8-r');
+        #s2 = s2.encode('koi8-r');
+        #s1 = s1.encode('ascii','replace');
+        #s2 = s2.encode('ascii','replace');
+        #s1 = u'%s' % u''.join(str(s1));
+        #s2 = u'%s' % u''.join(str(s2));
         #s3 = s1+s2;
         print (s1+s2);
 
