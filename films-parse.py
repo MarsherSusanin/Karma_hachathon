@@ -157,7 +157,9 @@ if l < 250:
     ps1 = data.find(s1,1,len(data))+len(s1);
     if ps1 >= len(s1):
         ps2 = data.find(s2,ps1,len(data));
-        stMovieResult.append(data[ps1:ps2]);
+        data1 = data[ps1:ps2];
+        data1 = data1.replace("\u2013", "-")
+        stMovieResult.append(data1);
         data = data[ps2:len(data)];
     else:
         stMovieResult.append('');
@@ -174,11 +176,14 @@ if l < 250:
     
     # Описание фильма
     s1 = 'itemprop="description">\n                    ';
-    s2 = '\n';#\n\n            </div>';
+    s2 = '\n            </div>';#\n\n            </div>';
     ps1 = data.find(s1,1,len(data))+len(s1);
-    if ps1 >= len(s1):
-        ps2 = data.find(s2,ps1,len(data));
-        stMovieResult.append(data[ps1:ps2]);
+    ps2 = data.find(s2,ps1,len(data));
+    data1 = data[ps1:ps2];
+    s3 = '<a href';
+    ps3 = data1.find(s3,0,len(data1));
+    if ps1 >= len(s1) and ps2 >= len(s2) and ps3 == -1:
+        stMovieResult.append(data1);
         data = data[ps2:len(data)];
     else:
         stMovieResult.append('');
