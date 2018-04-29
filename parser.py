@@ -7,12 +7,12 @@ def get_html(url):
 
 def parse (html):
     soup = BeautifulSoup(html,'html.parser')
-    tittle=soup.find('p', class_="Title")
+    tittle=soup.find('div', class_="movie-summary")
     print (tittle.prettify())
 
 
 def main ():
-    parse(get_html('https://www.filmpro.ru/materials/selections/63250'))
+    parse(get_html('http://cinemate.cc/movies'))
     
 
 if __name__=='__main__':
