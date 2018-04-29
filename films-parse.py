@@ -235,12 +235,12 @@ for i in range(len(stMovieResult)):
     if stMovieResult[i] != '':
         s1 = stMovieResultDesc[i];
         s2 = stMovieResult[i];
-        #s1 = s1.encode('utf8');
-        #s2 = s2.encode('utf8');
-        s1 = u''.join(s1);
-        s2 = u''.join(s2);
-        s3 = s1+s2;
-        print (u''.join(s3));
+        s1 = s1.encode('utf8');
+        s2 = s2.encode('utf8');
+        #s1 = u'%s' % u''.join(s1);
+        #s2 = u'%s' % u''.join(s2);
+        #s3 = s1+s2;
+        print (s1+s2);
 
 # Запись описание фильма в текстовой файл
 f=open("hakaton.txt","w", encoding="utf-8");
